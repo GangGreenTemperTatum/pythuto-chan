@@ -2,8 +2,8 @@ import uuid
 import os
 from fastapi import APIRouter, FastAPI, WebSocket, Request, HTTPException, Depends
 from utils.console import pretty_print, MessageType
-from src.socket.connection import ConnectionManager
-from src.socket.utils import get_token
+from server.src.socket.connection import ConnectionManager
+from server.src.socket.utils import get_token
 import time
 from server.src.redis.producer import Producer
 from server.src.redis.config import Redis
