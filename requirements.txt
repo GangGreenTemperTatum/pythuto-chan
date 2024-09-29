@@ -11,3 +11,5 @@ httpx>=0.20.0
 asyncio>=3.4.3
 websockets>=10.1
 rejson>=0.5.6
+typing>=3.10.0
+requests>=2.32.3

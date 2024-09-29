@@ -10,11 +10,13 @@
 ## Features
 
 - **FastAPI**: A modern, fast (high-performance) web framework for building APIs with Python.
-- **HuggingFace Inference API**: Leverage state-of-the-art machine learning models for natural language processing.
+- **HuggingFace Inference API**: Leverage open-source machine learning models for natural language processing.
+  - Uses HTTP since most people don't have a pro account with the support of websockets.
+  - GPT-J-6B is a generative language model which was trained with 6 Billion parameters and performs closely with OpenAI's GPT-3 on some tasks.
 - **Redis Memory Store**: Efficiently store and retrieve conversation history, see the [redis structure](./worker).
   - We isolate our worker environment from the web server so that when the client sends a message to our WebSocket, the web server does not have to handle the request to the third-party service. Also, resources can be freed up for other users.
   - The background communication with the inference API is handled by this worker service, through Redis. Requests from all connected clients are appended to the message queue (producer), while the worker consumes the messages, sends the requests to the inference API, and appends the responses to a response queue. Once the API receives a response, it sends it back to the client. During the trip between the producer and the consumer, the client can send multiple messages, and these messages will be queued up and responded to in order. Ideally, this worker could run on a completely different server in its own environment, but for now, it will run in its own Python environment on our local machine.
-- **Local Deployment**: Run the chatbot locally on your machine or host it on dedicated infrastructure.
+- **Local Deployment**: Run the application locally on your machine or host it on dedicated infrastructure using open-source.
 - **Websockets**: The [asynchronous connections code (`ConnectionManager` class)](src/socket/connections.py) utilizes websockets for multiple session concurrency and also authorizes only valid sessions.
 
 Checkout the [resources folder](./resources) for an OpenAPI schema and import it into Bruno/Postman etc.
@@ -35,7 +37,8 @@ Follow these steps to set up `pythuto-chan` on your local machine:
     source pythuto-venv/bin/activate
 
     export APP_ENV=development
-    export HUGGINGFACE_API_KEY="<YOUR_HUGGINGFACE_API_KEY>"
+    export HF_INFERENCE_TOKEN="<hf_YOUR_HUGGINGFACE_INFERENCE_TOKEN>"
+    export MODEL_URL=https://<YOUR_INFERENCE_ENDPOINT>/models/EleutherAI/gpt-j-6B # example model
     ```
 
 Or via an `.env` file, (less preferred) `touch.env && echo "export APP_ENV=development" >> .env`
