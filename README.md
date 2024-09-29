@@ -11,9 +11,11 @@
 
 - **FastAPI**: A modern, fast (high-performance) web framework for building APIs with Python.
 - **HuggingFace Inference API**: Leverage state-of-the-art machine learning models for natural language processing.
-- **Redis Memory Store**: Efficiently store and retrieve conversation history.
-- **Local Deployment**: Run the chatbot locally on your machine.
-- **Websockets**: The [asynchronous connections code (`ConnectionManager` class)](src/socket/connections.py) utilizes websockets for multiple session concurrency
+- **Redis Memory Store**: Efficiently store and retrieve conversation history, see the [redis structure](./worker).
+  - We isolate our worker environment from the web server so that when the client sends a message to our WebSocket, the web server does not have to handle the request to the third-party service. Also, resources can be freed up for other users.
+  - The background communication with the inference API is handled by this worker service, through Redis. Requests from all connected clients are appended to the message queue (producer), while the worker consumes the messages, sends the requests to the inference API, and appends the responses to a response queue. Once the API receives a response, it sends it back to the client. During the trip between the producer and the consumer, the client can send multiple messages, and these messages will be queued up and responded to in order. Ideally, this worker could run on a completely different server in its own environment, but for now, it will run in its own Python environment on our local machine.
+- **Local Deployment**: Run the chatbot locally on your machine or host it on dedicated infrastructure.
+- **Websockets**: The [asynchronous connections code (`ConnectionManager` class)](src/socket/connections.py) utilizes websockets for multiple session concurrency and also authorizes only valid sessions.
 
 Checkout the [resources folder](./resources) for an OpenAPI schema and import it into Bruno/Postman etc.
 
@@ -30,7 +32,7 @@ Follow these steps to set up `pythuto-chan` on your local machine:
 2. **Create a virtual environment**:
     ```sh
     python3 -m venv pythuto-venv
-    source venv/bin/activate
+    source pythuto-venv/bin/activate
 
     export APP_ENV=development
     export HUGGINGFACE_API_KEY="<YOUR_HUGGINGFACE_API_KEY>"
@@ -89,7 +91,34 @@ Or via an `.env` file, (less preferred) `touch.env && echo "export APP_ENV=devel
         ```
     - Start the Redis server:
         ```sh
-        redis-server
+        brew services start redis
+        brew services info redis
+        ```
+    - Test the Redis server:
+        ```sh
+        redis-cli
+        ping
+        ```
+    - Next open up a new terminal, cd into the worker folder, and create and activate a new Python virtual environment and install requirements:
+        ```sh
+        cd ./worker
+        python3 -m venv redis-venv
+        source redis-venv/bin/activate
+        
+        pip install -r requirements.txt
+        ```
+    - Add Redis `.env` files in `/worker/.env` (example default local redis setup)
+        ```sh
+        REDIS_URL=localhost:6379
+        REDIS_USER=default
+        REDIS_PASSWORD=
+        REDIS_HOST=localhost
+        REDIS_PORT=6379
+        ```
+    - Test the redis connection to create a new Redis connection pool, set a simple key "key", and assign a string "value" to it:
+        ```sh
+        (redis-venv) (pythuto-venv) ➜  worker git:(main) ✗ python3 main.py                
+        Redis<ConnectionPool<Connection<host=localhost,port=6379,db=0>>>
         ```
 
 6. **Run the FastAPI application**:

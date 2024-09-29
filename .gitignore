@@ -9,6 +9,7 @@ venv/
 env/
 .env
 pythuto-venv/
+*redis-venv
 *.DS_STORE
 */.DS_STORE
 
