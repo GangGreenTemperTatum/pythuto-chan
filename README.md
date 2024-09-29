@@ -122,7 +122,7 @@ Or via an `.env` file, (less preferred) `touch.env && echo "export APP_ENV=devel
         ..
         Redis<ConnectionPool<Connection<host=localhost,port=6379,db=0>>>
         ```
-    - Test the Websocket Chat session:
+    - Test the Websocket session:
         ```sh
         (redis-venv) (pythuto-venv) ➜  utils git:(main) ✗ cd ~/git/pythuto-chan
         (redis-venv) (pythuto-venv) ➜  pythuto-chan git:(main) ✗ python3 -m utils.test_chat
@@ -136,6 +136,13 @@ Or via an `.env` file, (less preferred) `touch.env && echo "export APP_ENV=devel
         ℹ Token received: c6d361fd-5912-43dc-a999-818d8ded15ab
         ℹ Response from chat: Response: Simulating response from the GPT service
         ℹ Response from chat: Response: Simulating response from the GPT service
+        ```
+    - Test `/chat`:
+        ```sh
+        curl -N \
+             -H "Content-Type: application/json" \
+             --url "ws://localhost:3500/chat?token=db86462b-3e5e-4955-96aa-e17685117309" \
+             --data '{"message": "Hello"}'
         ```
 
 If you see errors similar to (`redis.exceptions.ResponseError`), ensure you have `redis-json` installed (`pip install redis-json`) and if hosting a local redis server that the module is loaded into redis (`redis-server --loadmodule /path/to/rejson.so`)

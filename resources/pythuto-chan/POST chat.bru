@@ -1,0 +1,23 @@
+meta {
+  name: POST chat
+  type: http
+  seq: 4
+}
+
+post {
+  url: ws://localhost:3500/chat?token=db86462b-3e5e-4955-96aa-e17685117309
+  body: json
+  auth: none
+}
+
+query {
+  token: db86462b-3e5e-4955-96aa-e17685117309
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {"message": "Hello"}
+}
