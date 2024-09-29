@@ -10,3 +10,4 @@ uuid>=1.30
 httpx>=0.20.0
 asyncio>=3.4.3
 websockets>=10.1
+rejson>=0.5.6

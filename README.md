@@ -117,7 +117,9 @@ Or via an `.env` file, (less preferred) `touch.env && echo "export APP_ENV=devel
         ```
     - Test the redis connection to create a new Redis connection pool, set a simple key "key", and assign a string "value" to it:
         ```sh
-        (redis-venv) (pythuto-venv) ➜  worker git:(main) ✗ python3 main.py                
+        nc localhost -vz 6379
+        python3 main.py
+        ..
         Redis<ConnectionPool<Connection<host=localhost,port=6379,db=0>>>
         ```
 
@@ -141,6 +143,36 @@ Or via an `.env` file, (less preferred) `touch.env && echo "export APP_ENV=devel
         Message id b'1727615408366-0' added to message_channel stream
         ```
 
+If you see errors similar to (`redis.exceptions.ResponseError`), ensure you have `redis-json` installed (`pip install redis-json`) and if hosting a local redis server that the module is loaded into redis (`redis-server --loadmodule /path/to/rejson.so`)
+
+    ```sh
+      File "/Users/adam/git/pythuto-chan/pythuto-venv/lib/python3.10/site-packages/redis/connection.py", line 756, in read_response
+        raise response
+    redis.exceptions.ResponseError: unknown command 'JSON.SET', with args beginning with: '3569b1fc-188b-4855-be55-73ece932ad56' '.' '{"token":     "3569b1fc-188b-4855-be55-73ece932ad56", "messages": [], "name": "pythuto", ' 
+    WARNING:  StatReload detected file change in 'server/src/redis/config.py'. Reloading...
+    ```
+
+The RedisJSON module is not a Python package that you install with pip. Instead, it is a Redis module that needs to be loaded into the Redis server. Installing redis-json with pip only provides the client-side tools to interact with RedisJSON, but you still need to load the RedisJSON module into your Redis server.
+
+See [Installing RedisJSON on a Local Redis Server: A Comprehensive Setup Guide](https://infiq.ravikyada.in/integrating-redisjson-to-your-local-redis-server-optimizing-json-handling-for-enhanced-performance-15594f3ced13)
+
+- **Start Redis Server with RedisJSON Module**:
+    ```sh
+    brew services stop redis # important to prevent two instances of redis running
+    redis-server --loadmodule /path/to/rejson.so
+    ```
+
+- **Verify Module is Loaded**:
+    - Use the Redis CLI to verify that the RedisJSON module is loaded:
+    ```sh
+    redis-cli
+    127.0.0.1:6379> MODULE LIST
+    1) 1) "name"
+       2) "ReJSON"
+       3) "ver"
+       4) (integer) 20000
+    ```
+
 6. **Run the FastAPI application**:
     ```sh
     uvicorn main:app --reload
@@ -162,6 +194,8 @@ Enjoy chatting with `pythuto-chan`! Believe it! 🍥🦊
 ## Development 🚧
 
 - JWT authentication / refresh tokens
+- Authorization for chat sessions
+- Containerize application
 
 ## Star History 🪐
 

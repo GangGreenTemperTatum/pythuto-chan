@@ -40,3 +40,6 @@ uvicorn.log
 
 # Ignore Redis data directory
 redis_data/
+server/dump.rdb
+# Ignore redis RedisJSON module
+librejson.dylib
