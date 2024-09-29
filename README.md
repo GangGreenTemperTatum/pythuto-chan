@@ -121,6 +121,26 @@ Or via an `.env` file, (less preferred) `touch.env && echo "export APP_ENV=devel
         Redis<ConnectionPool<Connection<host=localhost,port=6379,db=0>>>
         ```
 
+    - Test the Websocket Chat Stream with Redis
+        ```sh
+        python3 utils/test_chat_stream.py
+
+        ..
+
+        ✅ Token generated for pythuto: 262baf50-0f70-4089-b019-6077315138ef
+        INFO:     127.0.0.1:53930 - "POST /token?name=pythuto HTTP/1.1" 200 OK
+        INFO:     ('127.0.0.1', 53931) - "WebSocket /chat" [accepted]
+        INFO:     connection open
+        HELLO
+        Message id b'1727615405358-0' added to message_channel stream
+        HELLO
+        Message id b'1727615406361-0' added to message_channel stream
+        HELLO
+        Message id b'1727615407363-0' added to message_channel stream
+        HELLO
+        Message id b'1727615408366-0' added to message_channel stream
+        ```
+
 6. **Run the FastAPI application**:
     ```sh
     uvicorn main:app --reload

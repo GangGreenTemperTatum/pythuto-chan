@@ -4,8 +4,12 @@ from fastapi import APIRouter, FastAPI, WebSocket, Request, HTTPException, Depen
 from utils.console import pretty_print, MessageType
 from src.socket.connection import ConnectionManager
 from ..socket.utils import get_token
+from server.src.redis.producer import Producer
+from server.src.redis.config import Redis
 
 chat = APIRouter()
+manager = ConnectionManager()
+redis = Redis()
 
 # @route   POST /token
 # @desc    Route generating chat token
@@ -37,15 +41,19 @@ async def refresh_token(request: Request):
 # @desc    Socket for chatbot
 # @access  Public
 
-manager = ConnectionManager()
-
 @chat.websocket("/chat")
 async def websocket_endpoint(websocket: WebSocket, token: str = Depends(get_token)):
     await manager.connect(websocket)
+    redis_client = await redis.create_connection()
+    producer = Producer(redis_client)
+
     try:
         while True:
             data = await websocket.receive_text()
             print(data)
+            stream_data = {}
+            stream_data[token] = data
+            await producer.add_to_stream(stream_data, "message_channel")
             await manager.send_personal_message(f"Response: Simulating response from the GPT service", websocket)
 
     except WebSocketDisconnect:
