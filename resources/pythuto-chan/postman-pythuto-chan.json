@@ -1,0 +1,31 @@
+{
+  "info": {
+    "name": "pythuto-chan",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "GET test",
+      "event": [],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "http://localhost:3500/test"
+      }
+    },
+    {
+      "name": "bruno",
+      "event": []
+    },
+    {
+      "name": "POST token",
+      "event": [],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "url": "http://localhost:3500/token?name=pythuto"
+      }
+    }
+  ],
+  "variable": []
+}
