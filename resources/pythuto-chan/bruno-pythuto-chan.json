@@ -1,0 +1,157 @@
+{
+  "name": "pythuto-chan",
+  "version": "1",
+  "items": [
+    {
+      "type": "http",
+      "name": "GET test",
+      "seq": 2,
+      "request": {
+        "url": "http://localhost:3500/test",
+        "method": "GET",
+        "headers": [],
+        "body": {
+          "mode": "none",
+          "formUrlEncoded": [],
+          "multipartForm": []
+        },
+        "auth": {
+          "mode": "none",
+          "basic": {
+            "username": "",
+            "password": ""
+          },
+          "bearer": {
+            "token": ""
+          }
+        },
+        "script": {},
+        "vars": {},
+        "assertions": [],
+        "tests": "",
+        "query": []
+      }
+    },
+    {
+      "type": "json",
+      "name": "bruno",
+      "seq": 1
+    },
+    {
+      "type": "http",
+      "name": "POST token",
+      "seq": 3,
+      "request": {
+        "url": "http://localhost:3500/token?name=pythuto",
+        "method": "POST",
+        "headers": [],
+        "body": {
+          "mode": "none",
+          "formUrlEncoded": [],
+          "multipartForm": []
+        },
+        "auth": {
+          "mode": "none",
+          "basic": {
+            "username": "",
+            "password": ""
+          },
+          "bearer": {
+            "token": ""
+          }
+        },
+        "script": {},
+        "vars": {},
+        "assertions": [],
+        "tests": "",
+        "query": [
+          {
+            "name": "name",
+            "value": "pythuto",
+            "enabled": true
+          }
+        ]
+      }
+    },
+    {
+      "type": "http",
+      "name": "POST chat",
+      "seq": 4,
+      "request": {
+        "url": "ws://localhost:3500/chat?token=db86462b-3e5e-4955-96aa-e17685117309",
+        "method": "POST",
+        "headers": [
+          {
+            "name": "Content-Type",
+            "value": "application/json",
+            "enabled": true
+          }
+        ],
+        "body": {
+          "mode": "json",
+          "json": "{\"message\": \"Hello\"}",
+          "formUrlEncoded": [],
+          "multipartForm": []
+        },
+        "auth": {
+          "mode": "none",
+          "basic": {
+            "username": "",
+            "password": ""
+          },
+          "bearer": {
+            "token": ""
+          }
+        },
+        "script": {},
+        "vars": {},
+        "assertions": [],
+        "tests": "",
+        "query": [
+          {
+            "name": "token",
+            "value": "db86462b-3e5e-4955-96aa-e17685117309",
+            "enabled": true
+          }
+        ]
+      }
+    },
+    {
+      "type": "http",
+      "name": "GET refresh_token fetch chat from Redis",
+      "seq": 5,
+      "request": {
+        "url": "http://localhost:3500/refresh_token?token=be443cb7-0de8-4768-9507-3ba3c8d86352",
+        "method": "GET",
+        "headers": [],
+        "body": {
+          "mode": "none",
+          "formUrlEncoded": [],
+          "multipartForm": []
+        },
+        "auth": {
+          "mode": "none",
+          "basic": {
+            "username": "",
+            "password": ""
+          },
+          "bearer": {
+            "token": ""
+          }
+        },
+        "script": {},
+        "vars": {},
+        "assertions": [],
+        "tests": "",
+        "query": [
+          {
+            "name": "token",
+            "value": "be443cb7-0de8-4768-9507-3ba3c8d86352",
+            "enabled": true
+          }
+        ]
+      }
+    }
+  ],
+  "environments": []
+}
