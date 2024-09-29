@@ -1,0 +1,41 @@
+# Ignore Python cache files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Ignore virtual environments
+venv/
+.venv/
+env/
+.env
+pythuto-venv/
+*.DS_STORE
+*/.DS_STORE
+
+# Ignore local development and testing settings
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Ignore IDE and editor files
+.idea/
+.vscode/
+
+# Ignore logs and temporary files
+logs/
+*.log
+*.tmp
+
+# Ignore compiled files
+*.pyc
+
+# Ignore generated files
+.mypy_cache/
+.pytest_cache/
+
+# Ignore FastAPI Uvicorn server logs
+uvicorn.log
+
+# Ignore Redis data directory
+redis_data/
