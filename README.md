@@ -5,6 +5,11 @@
 </div>
 <br>
 
+<div align="left">
+  <img src="media/architecture.png" alt="pythuto-chan" width="600"/>
+</div>
+<br>
+
 `pythuto-chan` is a local AI chatbot application built using Python's FastAPI, HuggingFace's inference API, and Redis for memory storage. Inspired by the beloved anime character Naruto, Pythuto-chan brings the power of AI to your local environment.
 
 ## Features
