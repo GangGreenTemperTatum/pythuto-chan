@@ -1,0 +1,15 @@
+meta {
+  name: GET refresh_token fetch chat from Redis
+  type: http
+  seq: 5
+}
+
+get {
+  url: http://localhost:3500/refresh_token?token=be443cb7-0de8-4768-9507-3ba3c8d86352
+  body: none
+  auth: none
+}
+
+query {
+  token: be443cb7-0de8-4768-9507-3ba3c8d86352
+}

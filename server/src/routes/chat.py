@@ -10,6 +10,7 @@ from server.src.redis.producer import Producer
 from server.src.redis.config import Redis
 from server.src.schema.chat import Chat
 from rejson import Path
+from ..redis.cache import Cache
 
 # Initialize logging
 logging.basicConfig(level=logging.INFO)
@@ -56,9 +57,17 @@ async def token_generator(name: str, request: Request):
 # @access  Public
 
 # endpoint to get the chat history from the Redis database using our Cache class.
-@chat.post("/refresh_token")
-async def refresh_token(request: Request):
-    return None
+@chat.get("/refresh_token")
+async def refresh_token(request: Request, token: str):
+    json_client = redis.create_rejson_connection()
+    cache = Cache(json_client)
+    data = await cache.get_chat_history(token)
+
+    if data == None:
+        raise HTTPException(
+            status_code=400, detail="Session expired or does not exist")
+    else:
+        return data
 
 # @route   Websocket /chat
 # @desc    Socket for chatbot

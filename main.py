@@ -3,7 +3,7 @@ import uvicorn
 import os
 from dotenv import load_dotenv
 from utils.console import pretty_print, MessageType
-from src.routes.chat import chat
+from server.src.routes.chat import chat
 
 load_dotenv()
 
