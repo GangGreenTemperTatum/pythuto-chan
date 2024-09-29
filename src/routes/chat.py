@@ -31,7 +31,7 @@ async def token_generator(name: str, request: Request):
         raise HTTPException(status_code=400, detail={
             "loc": "name",  "msg": "Enter a valid name"})
 
-    # Create nee chat session
+    # Create new chat session
     json_client = redis.create_rejson_connection()
     chat_session = Chat(
         token=token,
