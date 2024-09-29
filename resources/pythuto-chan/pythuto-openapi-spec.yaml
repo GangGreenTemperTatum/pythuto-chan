@@ -1,0 +1,84 @@
+openapi: 3.0.0
+info:
+  title: pythuto-openapi-spec
+  version: 1.0.0
+paths:
+  http://localhost:3500/test:
+    get:
+      summary: GET test
+      operationId: GET test
+      description: ''
+      tags:
+        - ''
+      responses:
+        '200':
+          description: ''
+  http://localhost:3500/token?name=pythuto:
+    post:
+      summary: POST token
+      operationId: POST token
+      description: ''
+      tags:
+        - ''
+      responses:
+        '200':
+          description: ''
+      parameters:
+        - name: name
+          in: query
+          description: ''
+          required: true
+  ws://localhost:3500/chat?token=db86462b-3e5e-4955-96aa-e17685117309:
+    post:
+      summary: POST chat
+      operationId: POST chat
+      description: ''
+      tags:
+        - ''
+      responses:
+        '200':
+          description: ''
+      parameters:
+        - name: token
+          in: query
+          description: ''
+          required: true
+        - name: Content-Type
+          in: header
+          description: ''
+          required: true
+      requestBody:
+        $ref: '#/components/requestBodies/post_chat'
+  http://localhost:3500/refresh_token?token=be443cb7-0de8-4768-9507-3ba3c8d86352:
+    get:
+      summary: GET refresh_token fetch chat from Redis
+      operationId: GET refresh_token fetch chat from Redis
+      description: ''
+      tags:
+        - ''
+      responses:
+        '200':
+          description: ''
+      parameters:
+        - name: token
+          in: query
+          description: ''
+          required: true
+servers:
+  - url: ''
+components:
+  schemas:
+    post_chat:
+      type: object
+      properties:
+        message:
+          type: string
+  requestBodies:
+    post_chat:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/post_chat'
+      description: ''
+      required: true
+  securitySchemes: {}
