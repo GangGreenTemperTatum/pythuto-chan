@@ -13,6 +13,7 @@
 - **HuggingFace Inference API**: Leverage open-source machine learning models for natural language processing.
   - Uses HTTP since most people don't have a pro account with the support of websockets.
   - GPT-J-6B is a generative language model which was trained with 6 Billion parameters and performs closely with OpenAI's GPT-3 on some tasks.
+  - Handle chat history in a JSON database to simulate short-term memory for the model.
 - **Redis Memory Store**: Efficiently store and retrieve conversation history, see the [redis structure](./worker).
   - We isolate our worker environment from the web server so that when the client sends a message to our WebSocket, the web server does not have to handle the request to the third-party service. Also, resources can be freed up for other users.
   - The background communication with the inference API is handled by this worker service, through Redis. Requests from all connected clients are appended to the message queue (producer), while the worker consumes the messages, sends the requests to the inference API, and appends the responses to a response queue. Once the API receives a response, it sends it back to the client. During the trip between the producer and the consumer, the client can send multiple messages, and these messages will be queued up and responded to in order. Ideally, this worker could run on a completely different server in its own environment, but for now, it will run in its own Python environment on our local machine.
@@ -74,10 +75,8 @@ Or via an `.env` file, (less preferred) `touch.env && echo "export APP_ENV=devel
 
     ```sh
     curl -X POST "http://localhost:3500/token?name=pythuto"
+
     ..
-    {"name":"pythuto","token":"cd9df3b7-f035-4df8-b0cf-6bc28c7364e1"}%
-    
-    ...
 
     websocat ws://localhost:3500/chat -E -n -k <<< "Hello Bot"
     ..
@@ -140,6 +139,10 @@ Or via an `.env` file, (less preferred) `touch.env && echo "export APP_ENV=devel
         ℹ Response from chat: Response: Simulating response from the GPT service
         ℹ Response from chat: Response: Simulating response from the GPT service
         ```
+        ```
+        {'token': '4acb070e-d9ce-42fa-8fd9-a19c24cdaa03', 'messages': [], 'name': 'pythuto', 'session_start': '2024-09-29 14:19:19.406741'}
+        INFO:     127.0.0.1:56354 - "POST /token?name=pythuto HTTP/1.1" 200 OK
+        ```
     - Test `/chat`:
         ```sh
         curl -N \
@@ -150,12 +153,7 @@ Or via an `.env` file, (less preferred) `touch.env && echo "export APP_ENV=devel
 
 If you see errors similar to (`redis.exceptions.ResponseError`), ensure you have `redis-json` installed (`pip install redis-json`) and if hosting a local redis server that the module is loaded into redis (`redis-server --loadmodule /path/to/rejson.so`)
 
-    ```sh
-      File "/Users/adam/git/pythuto-chan/pythuto-venv/lib/python3.10/site-packages/redis/connection.py", line 756, in read_response
-        raise response
-    redis.exceptions.ResponseError: unknown command 'JSON.SET', with args beginning with: '3569b1fc-188b-4855-be55-73ece932ad56' '.' '{"token":     "3569b1fc-188b-4855-be55-73ece932ad56", "messages": [], "name": "pythuto", ' 
-    WARNING:  StatReload detected file change in 'server/src/redis/config.py'. Reloading...
-    ```
+    redis.exceptions.ResponseError: unknown command 'JSON.SET', with args beginning with: '3569b1fc-188b-4855-be55-73ece932ad56' '.' '{"token":     "3569b1fc-188b-4855-be55-73ece932ad56", "messages": [], "name": "pythuto", '  WARNING:  StatReload detected file change in 'server/src/redis/config.py'. Reloading...
 
 The RedisJSON module is not a Python package that you install with pip. Instead, it is a Redis module that needs to be loaded into the Redis server. Installing redis-json with pip only provides the client-side tools to interact with RedisJSON, but you still need to load the RedisJSON module into your Redis server.
 
