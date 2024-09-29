@@ -107,7 +107,7 @@ Or via an `.env` file, (less preferred) `touch.env && echo "export APP_ENV=devel
         
         pip install -r requirements.txt
         ```
-    - Add Redis `.env` files in `/worker/.env` (example default local redis setup)
+    - Add Redis `.env` files in `/worker/.env` (example default local redis setup):
         ```sh
         REDIS_URL=localhost:6379
         REDIS_USER=default
@@ -122,25 +122,20 @@ Or via an `.env` file, (less preferred) `touch.env && echo "export APP_ENV=devel
         ..
         Redis<ConnectionPool<Connection<host=localhost,port=6379,db=0>>>
         ```
-
-    - Test the Websocket Chat Stream with Redis
+    - Test the Websocket Chat session:
         ```sh
-        python3 utils/test_chat_stream.py
-
+        (redis-venv) (pythuto-venv) ➜  utils git:(main) ✗ cd ~/git/pythuto-chan
+        (redis-venv) (pythuto-venv) ➜  pythuto-chan git:(main) ✗ python3 -m utils.test_chat
+        ℹ Token received: 822fb3f0-444d-4b7e-9717-fc818ec4d88e
+        ℹ Response from chat: Response: Simulating response from the GPT service
         ..
-
-        ✅ Token generated for pythuto: 262baf50-0f70-4089-b019-6077315138ef
-        INFO:     127.0.0.1:53930 - "POST /token?name=pythuto HTTP/1.1" 200 OK
-        INFO:     ('127.0.0.1', 53931) - "WebSocket /chat" [accepted]
-        INFO:     connection open
-        HELLO
-        Message id b'1727615405358-0' added to message_channel stream
-        HELLO
-        Message id b'1727615406361-0' added to message_channel stream
-        HELLO
-        Message id b'1727615407363-0' added to message_channel stream
-        HELLO
-        Message id b'1727615408366-0' added to message_channel stream
+        ```
+    - Test the Websocket Chat Stream with Redis:
+        ```sh
+        (redis-venv) (pythuto-venv) ➜  pythuto-chan git:(main) ✗ python3 -m utils.test_chat_stream
+        ℹ Token received: c6d361fd-5912-43dc-a999-818d8ded15ab
+        ℹ Response from chat: Response: Simulating response from the GPT service
+        ℹ Response from chat: Response: Simulating response from the GPT service
         ```
 
 If you see errors similar to (`redis.exceptions.ResponseError`), ensure you have `redis-json` installed (`pip install redis-json`) and if hosting a local redis server that the module is loaded into redis (`redis-server --loadmodule /path/to/rejson.so`)
@@ -168,12 +163,12 @@ See [Installing RedisJSON on a Local Redis Server: A Comprehensive Setup Guide](
     redis-cli
     127.0.0.1:6379> MODULE LIST
     1) 1) "name"
-       2) "ReJSON"
-       3) "ver"
-       4) (integer) 20000
+       1) "ReJSON"
+       2) "ver"
+       3) (integer) 20000
     ```
 
-6. **Run the FastAPI application**:
+1. **Run the FastAPI application**:
     ```sh
     uvicorn main:app --reload
     ```
