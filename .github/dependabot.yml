@@ -1,6 +1,6 @@
 version: 2
 updates:
-  - package-ecosystem: "" # See documentation for possible values
-    directory: "/" # Location of package manifests
+  - package-ecosystem: "pip" # Python pip package manager
+    directory: "/" # Root directory of your project
     schedule:
-      interval: "weekly"
+      interval: "weekly" # Check for updates on a weekly basis
