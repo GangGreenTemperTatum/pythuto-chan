@@ -1,0 +1,9 @@
+{
+  "version": "1",
+  "name": "pythuto-chan",
+  "type": "collection",
+  "ignore": [
+    "node_modules",
+    ".git"
+  ]
+}

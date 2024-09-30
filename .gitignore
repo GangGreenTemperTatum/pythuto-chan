@@ -18,6 +18,7 @@ pythuto-venv/
 .env.development.local
 .env.test.local
 .env.production.local
+resources/pythuto-chan/excalidraw-hyperlink.txt
 
 # Ignore IDE and editor files
 .idea/
@@ -40,3 +41,6 @@ uvicorn.log
 
 # Ignore Redis data directory
 redis_data/
+server/dump.rdb
+# Ignore redis RedisJSON module
+librejson.dylib

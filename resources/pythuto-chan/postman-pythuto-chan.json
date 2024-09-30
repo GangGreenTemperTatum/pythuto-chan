@@ -1,0 +1,65 @@
+{
+  "info": {
+    "name": "pythuto-chan",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "GET test",
+      "event": [],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "http://localhost:3500/test"
+      }
+    },
+    {
+      "name": "bruno",
+      "event": []
+    },
+    {
+      "name": "POST token",
+      "event": [],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "url": "http://localhost:3500/token?name=pythuto"
+      }
+    },
+    {
+      "name": "POST chat",
+      "event": [],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "disabled": false,
+            "type": "default"
+          }
+        ],
+        "url": "ws://localhost:3500/chat?token=db86462b-3e5e-4955-96aa-e17685117309",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"message\": \"Hello\"}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "GET refresh_token fetch chat from Redis",
+      "event": [],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "http://localhost:3500/refresh_token?token=be443cb7-0de8-4768-9507-3ba3c8d86352"
+      }
+    }
+  ],
+  "variable": []
+}

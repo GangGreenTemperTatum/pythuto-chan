@@ -1,7 +1,7 @@
 import httpx
 import asyncio
 import websockets
-from .console import pretty_print, MessageType
+from utils.console import pretty_print, MessageType
 
 async def get_token(name: str):
     async with httpx.AsyncClient() as client:
@@ -11,18 +11,20 @@ async def get_token(name: str):
         pretty_print(f"Token received: {token}", MessageType.INFO)
         return token
 
-async def test_chat(token: str):
+async def test_chat_stream(token: str):
     uri = f"ws://localhost:3500/chat?token={token}"
     async with websockets.connect(uri) as websocket:
-        await websocket.send("HELLO")
-        response = await websocket.recv()
-        pretty_print(f"Response from chat: {response}", MessageType.INFO)
+        for i in range(10):  # Send 10 HELLO messages
+            await websocket.send("HELLO")
+            response = await websocket.recv()
+            pretty_print(f"Response from chat: {response}", MessageType.INFO)
+            await asyncio.sleep(1)  # Wait for 1 second between messages
 
 async def main():
     name = "pythuto"
     try:
         token = await get_token(name)
-        await test_chat(token)
+        await test_chat_stream(token)
     except httpx.HTTPStatusError as e:
         pretty_print(f"HTTP error occurred: {e}", MessageType.FATAL)
     except websockets.exceptions.WebSocketException as e:
